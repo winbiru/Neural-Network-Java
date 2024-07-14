@@ -52,4 +52,8 @@ public abstract class Layer {
                 return z;
         }
     }
+
+    public double[][] getWeights() {
+        return this.weights;
+    }
 }

@@ -96,6 +96,13 @@ public class NeuralNetwork {
         }
         return -1; // Không tìm thấy
     }
+    public double[][][] getWeights() {
+        List<double[][]> weightsList = new ArrayList<>();
+        for (Layer layer : layers) {
+            weightsList.add(layer.getWeights());
+        }
+        return weightsList.toArray(new double[0][][]);
+    }
 
     void saveWeights(String filePath) throws IOException {
         StringBuilder sb = new StringBuilder();

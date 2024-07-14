@@ -1,13 +1,41 @@
 package main;
 
+import java.util.Random;
+
+import static main.Activation.*;
+
 public class Dense extends Layer {
     private double[] input;
     private double[] z;
+    private Activation activation;
+    private int inputSize;
+    private int outputSize;
+    private Random random;
 
-    public Dense(int inputSize, int outputSize, String activation) {
+//    public Dense(int inputSize, int outputSize, String activation) {
+//        super(inputSize, outputSize, activation);
+//    }
+    public Dense(int inputSize, int outputSize, Activation activation) {
         super(inputSize, outputSize, activation);
+        this.inputSize = inputSize;
+        this.outputSize = outputSize;
+        this.activation = activation;
+        this.random = new Random();
+        this.weights = new double[inputSize][outputSize];
+        this.biases = new double[outputSize];
+        initializeWeights();
     }
-
+    private void initializeWeights() {
+        double range = Math.sqrt(6.0 / (inputSize + outputSize));
+        for (int i = 0; i < inputSize; i++) {
+            for (int j = 0; j < outputSize; j++) {
+                weights[i][j] = random.nextDouble() * 2 * range - range;
+            }
+        }
+        for (int i = 0; i < outputSize; i++) {
+            biases[i] = random.nextDouble() * 2 * range - range;
+        }
+    }
     @Override
     public double[] forward(double[] input) {
         this.input = input;

@@ -3,6 +3,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static main.Activation.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Unittest {
@@ -20,9 +21,9 @@ public class Unittest {
 
             // Train the model
             NeuralNetwork model = new NeuralNetwork();
-            model.addLayer(new Dense(784, 64, "relu"));
-            model.addLayer(new Dense(64, 32, "relu"));
-            model.addLayer(new Dense(32, 10, "softmax"));
+            model.addLayer(new Dense(784, 64, relu ));
+            model.addLayer(new Dense(64, 32, relu ));
+            model.addLayer(new Dense(32, 10, softmax));
             model.compile("categorical_crossentropy");
             model.fit(x_train, y_train, 10, 0.01);
 

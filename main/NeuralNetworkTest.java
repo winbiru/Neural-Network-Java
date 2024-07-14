@@ -6,17 +6,19 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
+import static main.Activation.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class NeuralNetworkTest {
     private NeuralNetwork model;
+    private Activation activation;
 
     @BeforeEach
     public void setUp() {
         model = new NeuralNetwork();
-        model.addLayer(new Dense(784, 64, "relu"));
-        model.addLayer(new Dense(64, 32, "relu"));
-        model.addLayer(new Dense(32, 10, "softmax"));
+        model.addLayer(new Dense(784, 64, relu));
+        model.addLayer(new Dense(64, 32, relu));
+        model.addLayer(new Dense(32, 10, softmax));
         model.compile("categorical_crossentropy");
     }
 
@@ -34,9 +36,9 @@ public void testSaveAndLoadWeights() throws IOException {
 
     // Create a new model and load weights
     NeuralNetwork loadedModel = new NeuralNetwork();
-    loadedModel.addLayer(new Dense(784, 64, "relu"));
-    loadedModel.addLayer(new Dense(64, 32, "relu"));
-    loadedModel.addLayer(new Dense(32, 10, "softmax"));
+    loadedModel.addLayer(new Dense(784, 64, relu));
+    loadedModel.addLayer(new Dense(64, 32, relu));
+    loadedModel.addLayer(new Dense(32, 10, softmax));
     loadedModel.compile("categorical_crossentropy");
     loadedModel.loadWeights(weightsFile);
 
@@ -66,8 +68,8 @@ public void testSaveAndLoadWeights() throws IOException {
 
         // Create a new model with different layers and load weights
         NeuralNetwork loadedModel = new NeuralNetwork();
-        loadedModel.addLayer(new Dense(784, 32, "relu"));
-        loadedModel.addLayer(new Dense(32, 10, "softmax"));
+        loadedModel.addLayer(new Dense(784, 32, relu ));
+        loadedModel.addLayer(new Dense(32, 10, softmax));
         loadedModel.compile("categorical_crossentropy");
 
         // Ensure the weights file exists before trying to load it
@@ -96,9 +98,9 @@ public void testSaveAndLoadWeights() throws IOException {
 
         // Create a new model with the same architecture as the original model and load weights
         NeuralNetwork loadedModel = new NeuralNetwork();
-        loadedModel.addLayer(new Dense(784, 64, "relu"));
-        loadedModel.addLayer(new Dense(64, 32, "relu"));
-        loadedModel.addLayer(new Dense(32, 10, "softmax"));
+        loadedModel.addLayer(new Dense(784, 64, relu ));
+        loadedModel.addLayer(new Dense(64, 32, relu ));
+        loadedModel.addLayer(new Dense(32, 10, softmax));
         loadedModel.compile("categorical_crossentropy");
 
         // Check if the weights file exists before trying to load it
@@ -127,9 +129,9 @@ public void testSaveAndLoadWeights() throws IOException {
 
         // Create a new model with the same activation functions as the original model and load weights
         NeuralNetwork loadedModel = new NeuralNetwork();
-        loadedModel.addLayer(new Dense(784, 64, "relu"));
-        loadedModel.addLayer(new Dense(64, 32, "relu"));
-        loadedModel.addLayer(new Dense(32, 10, "softmax"));
+        loadedModel.addLayer(new Dense(784, 64, relu ));
+        loadedModel.addLayer(new Dense(64, 32, relu ));
+        loadedModel.addLayer(new Dense(32, 10, softmax));
         loadedModel.compile("categorical_crossentropy");
 
         // Check if the weights file exists before trying to load it
@@ -142,5 +144,24 @@ public void testSaveAndLoadWeights() throws IOException {
         } catch (IllegalArgumentException e) {
             fail("Expected no exception to be thrown, but an IllegalArgumentException was caught");
         }
+    }
+    @Test
+    public void testFitFunctions() throws IOException {
+        // Train the model
+        NeuralNetwork nn = new NeuralNetwork();
+
+        // Add layers to the neural network
+        nn.addLayer(new Dense(2, 4, relu));
+        nn.addLayer(new Dense(4, 2, sigmoid));
+
+        // Compile the neural network with the mean squared error loss function
+        nn.compile("mse");
+
+        // Define training data
+        double[][] x_train = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+        double[][] y_train = {{0, 1}, {1, 0}, {1, 0}, {0, 1}};
+
+        // Train the neural network for 1000 epochs with a learning rate of 0.1
+        nn.fit(x_train, y_train, 1000, 0.1);
     }
 }
